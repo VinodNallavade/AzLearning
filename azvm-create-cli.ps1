@@ -19,9 +19,9 @@ $VM="winvm01"
 $USERNAME="azureadmin"
 $PASSWORD="YourP@ssw0rd123!"
 
-IMAGE="Win2022Datacenter"
+$IMAGE="Win2022Datacenter"
 
-SIZE="Standard_B1s"
+$SIZE="Standard_B1s"
 
 # ==========================================
 # Create Resource Group
