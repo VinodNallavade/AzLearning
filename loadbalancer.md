@@ -28,7 +28,7 @@ Demonstrates **both** inbound load balancing and outbound SNAT using a Standard 
 - **RDP scoping** — the script auto-detects your public IP via `ifconfig.me` and restricts RDP (port 3389) to it. If your IP changes, you'll need to update the NSG rule.
 
 
-![Loadbalancer Lab]([https://example.com](https://github.com/user-attachments/assets/454d4c04-c2af-400c-b1c6-235f7929cbf4))
+![Loadbalancer Lab](https://github.com/user-attachments/assets/454d4c04-c2af-400c-b1c6-235f7929cbf4)
 
 
 
