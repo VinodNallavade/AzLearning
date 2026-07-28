@@ -1,4 +1,4 @@
-# Standard Load Balancer Demo Lab (Azure CLI)
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/4fd03cfb-fe84-4abf-a73d-df9aa691805f" /># Standard Load Balancer Demo Lab (Azure CLI)
 
 Demonstrates **both** inbound load balancing and outbound SNAT using a Standard Azure Load Balancer, with two Windows Server VMs running IIS as the backend pool.
 
@@ -27,7 +27,9 @@ Demonstrates **both** inbound load balancing and outbound SNAT using a Standard 
 - **Region** — `LOCATION` defaults to `eastus`; change it to a region near you if needed.
 - **RDP scoping** — the script auto-detects your public IP via `ifconfig.me` and restricts RDP (port 3389) to it. If your IP changes, you'll need to update the NSG rule.
 
-![Uploading image.png…]()
+
+
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/454d4c04-c2af-400c-b1c6-235f7929cbf4" />
 
 
 
