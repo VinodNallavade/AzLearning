@@ -1,3 +1,39 @@
+# Standard Load Balancer Demo Lab (Azure CLI)
+
+Demonstrates **both** inbound load balancing and outbound SNAT using a Standard Azure Load Balancer, with two Windows Server VMs running IIS as the backend pool.
+
+## What This Lab Builds
+
+- A resource group, VNet/subnet, and NSG (HTTP open to all, RDP restricted to your public IP)
+- A Standard SKU public IP (zone-redundant)
+- A Standard Load Balancer with:
+  - An HTTP health probe (port 80)
+  - An inbound load-balancing rule (`:80` → backend `:80`)
+  - An explicit **outbound rule** for SNAT (since `disable-outbound-snat=true` is set on the inbound rule)
+  - Two inbound NAT rules for per-VM RDP management (ports `50001` / `50002`)
+- An availability set with 2 fault domains / 2 update domains
+- Two NICs, each attached to the backend pool and one NAT rule
+- Two Windows Server 2022 VMs (`vm-web1`, `vm-web2`) with IIS installed and a distinct `index.html` per VM, so you can visually confirm round-robin behavior
+
+## Prerequisites
+
+- Azure CLI installed and logged in (`az login`)
+- Sufficient quota for 2x `Standard_B2s` VMs in the target region
+- `curl` available locally (used to detect your public IP for the RDP NSG rule)
+
+## ⚠️ Before You Run
+
+- **Change `ADMIN_PASS`** — the placeholder password in the script must be replaced with a strong, unique password before deployment.
+- **Region** — `LOCATION` defaults to `eastus`; change it to a region near you if needed.
+- **RDP scoping** — the script auto-detects your public IP via `ifconfig.me` and restricts RDP (port 3389) to it. If your IP changes, you'll need to update the NSG rule.
+
+
+
+
+
+## Script
+
+```bash
 #!/usr/bin/env bash
 # =============================================================================
 # Standard Load Balancer Demo Lab (Azure CLI)
@@ -214,10 +250,6 @@ az vm run-command invoke \
   --name vm-web1 \
   --command-id RunPowerShellScript \
   --scripts "$IIS_SCRIPT_VM1"
-<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/a122373a-a3cd-4c8c-9736-ecd94a4307f6" />
-
-
-
 
 az vm run-command invoke \
   --resource-group "$RG" \
@@ -246,3 +278,30 @@ echo ""
 echo "CLEAN UP WHEN DONE:"
 echo "  az group delete --name $RG --yes --no-wait"
 echo "============================================================"
+```
+
+## Testing the Lab
+
+**Inbound round-robin:**
+```bash
+for i in 1 2 3 4 5 6; do curl -s http://<LB_PUBLIC_IP>; echo; done
+```
+You should see the response alternate between "Hello from VM-WEB1" and "Hello from VM-WEB2".
+
+**RDP management (per-VM):**
+```
+mstsc /v:<LB_PUBLIC_IP>:50001   # -> vm-web1
+mstsc /v:<LB_PUBLIC_IP>:50002   # -> vm-web2
+```
+
+**Outbound SNAT** — from inside an RDP session, run:
+```powershell
+(Invoke-WebRequest -Uri 'https://ifconfig.me').Content
+```
+The result should match the load balancer's public IP.
+
+## Cleanup
+
+```bash
+az group delete --name rg-lb-demo --yes --no-wait
+```
