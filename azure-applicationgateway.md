@@ -6,26 +6,8 @@ This setup mirrors a very common real-world cloud modernization pattern: a compa
 
 **Azure Application Gateway (WAF_v2)** sits in front of both and routes traffic based on URL path — so clients only ever see one single endpoint, one SSL certificate, and one WAF policy.
 
-```
-                               Internet
-                                  │
-                    Public IP (Standard, Static)
-                                  │
-                   ┌──── Application Gateway (WAF_v2) ────┐
-                   │         Path-based routing           │
-                   │                                      │
-             "/"  (default)                          "/api/*"
-                   │                                      │
-       ┌───────────┴───────────┐                          │
-       │                       │                       Windows VM (IIS)
-  App Service #1          App Service #2               "vm-legacy-api"
-   (primary)               (secondary)                private IP only
-       │                       │                          │
-       └── access-restricted to only accept traffic from ──┘
-           the Application Gateway's Public IP
-```
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/fea4486b-6175-4826-9e38-ec8f6343a205" />
 
----
 
 ## Key Enterprise Design Controls
 
