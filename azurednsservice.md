@@ -49,6 +49,9 @@ NS1=$(az network dns record-set ns show \
   --name @ \
   --query "NSRecords[0].nsdname" -o tsv)
 
+#  ------ Test Public DNS--------------
+nslookup www.$ZONE_PUBLIC $NS1
+
 az group create --name "$RG_PRIVATE" --location "$LOCATION"
 
 az network vnet create \
