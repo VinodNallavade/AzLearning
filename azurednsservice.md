@@ -47,7 +47,7 @@ NS1=$(az network dns record-set ns show \
   --resource-group "$RG_PUBLIC" \
   --zone-name "$ZONE_PUBLIC" \
   --name @ \
-  --query "nsRecords[0].nsdname" -o tsv)
+  --query "NSRecords[0].nsdname" -o tsv)
 
 az group create --name "$RG_PRIVATE" --location "$LOCATION"
 
